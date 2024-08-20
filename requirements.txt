@@ -1,0 +1,10 @@
+colorama==0.4.6
+coloredlogs==15.0.1
+fanbookbotapi==1.2.2
+g4f==0.3.2.3
+openai==0.28.0
+psutil==6.0.0
+Pygments==2.18.0
+Requests==2.32.3
+sentry_sdk==2.12.0
+websocket_client==1.8.0
