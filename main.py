@@ -1,3 +1,11 @@
+import logging
+import coloredlogs
+# 创建日志记录器
+logger = logging.getLogger(__name__)
+
+# 配置 coloredlogs
+coloredlogs.install(level='DEBUG', logger=logger)
+logger.info("开始加载库")
 import requests#http请求
 import json#json数据处理
 import traceback#错误捕获
@@ -13,6 +21,7 @@ from pygments import highlight#高亮
 from pygments.lexers import JsonLexer#高亮
 from pygments.formatters import TerminalFormatter#高亮
 from colorama import init, Fore, Back, Style#高亮
+init(autoreset=True)  #初始化自动恢复颜色，多次执行会导致卡慢
 import urllib.request
 import ssl
 import psutil
@@ -24,6 +33,7 @@ import fanbookbotapi
 import ctypes
 import re
 from g4f.client import Client
+logger.info("加载完成，开始初始化")
 
 def is_string_in_another_string(str1, str2):
     # 使用search()函数
@@ -44,10 +54,10 @@ openai.api_base = "https://api.chatanywhere.tech/v1"
 #openai.api_base = "https://openkey.cloud/v1"
 
 messages = []
-openai.api_key="sk-EDbDacJ2E"
+openai.api_key="sk-****"
 
 sentry_sdk.init(
-    dsn="https://cc747dea8f773476ede3e713f99b3593@o4507525750521856.ingest.us.sentry.io/4507706575421440",
+    dsn="https://***.ingest.us.sentry.io/4507706575421440",
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
@@ -57,9 +67,8 @@ sentry_sdk.init(
     profiles_sample_rate=1.0,
 )
 
-init(autoreset=True)  #初始化自动恢复颜色，多次执行会导致卡慢
 b=0
-lingpai='50357763a9034c01c3319a7'
+lingpai='50357763a9034c07'
 
 def sentrytool(tags,key,v=1):
     # Increment a counter by one for each button click.
@@ -68,19 +77,12 @@ def sentrytool(tags,key,v=1):
         value=v,
         tags=tags
     )
-
+logger.info("初始化完成，开始运行")
 for s in range(30):
     try:
         zdsxw=10
         b+=1
-        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-        headers = {'content-type':"application/json;charset=utf-8"}
-        jsonfile=json.dumps({
-        "chat_id":545093460387282944,
-        "text":"ChatGPT服务启动[5.1]\n标识号:FREE1\n第"+str(s+1)+"次，共30次"
-        })
-        print(jsonfile)
-        postreturn=requests.post(url,data=jsonfile,headers=headers)
+        print(fanbookbotapi.sendmessage(lingpai,chatid=545093460387282944,text="ChatGPT服务启动[5.2]\n标识号:FREE1\n第"+str(s+1)+"次，共30次",type='text').text)
         def get_audio_duration(url,msg):
             """
             try:
@@ -103,13 +105,7 @@ for s in range(30):
             """
             # 获取到的时长单位为秒
             return len(msg) // 4
-        '''
-        url = "https://speech.ai.xiaomi.com/speech/1.0/tts_token?token=eyJ2IjoiVjAiLCJuIjoiU1oifQ.AAAXUkp9P1QAFgBdFAwbZ24VTkoaRRsPG2AFFhgAQgBIRyIvRw4PfR9GGBh0VUBPEQhHWxBrPkBITxBDEFhHb1RHT0FXEw0QY20QRU4AWgBZTTJVQQ4YTE9KEXF2AAkUSRNMGBh0XUdeQRtQQ31hahBOGRJPQwlGMwUXHBFdQV5ANmhBTk0UTkEPFW4BQXMUWUECR2A-QEtIEkJHXBM3VRtKFQsSAxpgYxceGBVFEBRPJgMAAAAKR0xLMD99FB8ATABeR2NVQBlHWw8KEjE7D0kaERcPAkBlBA8YR1tEDkBqbxQcQhNUDhhLN0QAFhNYGwkTY2IVSkMOVEdCUnQKExobXRACE2ZtGgA.EO5fMqpLGoC6LrZI3pQP5w"
-        audio_duration = get_audio_duration(url)
-        print(f"音频时长：{audio_duration} 秒")
-        '''
         ms='0'
-        lingpai='50357763a9034c07c3a6589d53cce2b0f8d65a523b0684d6de33bd62ba569f1397d687a992731ae59b8e16911c3319a7'
         sycyid=[]#使用成员id
         cysycs=[]#成员使用次数
         jgczsj=0#警告重置时间
@@ -132,6 +128,9 @@ for s in range(30):
         hfms=[]#回复模式
         tsc=[]#提示词
         kimi_Id=[]#kimi的上下文id
+        glm_id=[]#智谱清言 ChatGLM4的上下文id
+        glm4_token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiEvjAmD_O6mlSxRBeMC04xluED7ZGoQZ4I_SKU'
+        kimi_token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiXNkdjE0N2Q0YW0yZzAifQ.-Ct3HyxFbTT9BLUEqpi0mChIgoCgSd05OJUIaOxNRbJDsCY3HgcwPq7Bu9Nxm46zcvtEn05rFGfQl2RQx3oobA'
         sycs1=0
         xerror=False
         def addmsg(msg, color="white"):
@@ -200,10 +199,10 @@ for s in range(30):
                 global ms
                 global xz
                 global sycyid,cysycs,jgczsj,dycs,hhxxlb,hhidlb,messages
-                global gjc,fwqlb,fwqxz,fwqms,efzdy,mxlb,hhpdidlb,xxjl,xxfsz,xxfszid,xerror,sycs1
+                global gjc,fwqlb,fwqxz,fwqms,efzdy,mxlb,hhpdidlb,xxjl,xxfsz,xxfszid,xerror,sycs1,kimi_Id,glm_id
                 # 处理接收到的消息
                 if zdyzyxx == False:
-                    addmsg('收到消息',color='green')
+                    logger.info('收到消息')
                     colorize_json(message)
                 message=json.loads(message)
                 if message["action"] =="push":
@@ -215,14 +214,14 @@ for s in range(30):
                             content = json.loads(message["data"]["content"])
                             userid=message["data"]["user_id"]
                             fwqid=message["data"]["guild_id"]
-                            if "${@!469790724255502336}" in content['text']:
+                            if "${@!469790724255502336}" in content['text']:#注意这里的botid
                                 if zdyzyxx:
-                                    addmsg('收到重要消息',color='green')
+                                    logger.info('收到重要消息')
                                     colorize_json(message)
                                 efzdy+=1
                                 dycs+=1
                                 if fwqid in fwqlb:
-                                    print('服务器id:',fwqid,'已经记录过，不需要重新记录')
+                                    logger.info('服务器id:'+str(fwqid)+'已经记录过，不需要重新记录')
                                 else:
                                     fwqlb.append(fwqid)
                                     fwqms.append("0")
@@ -232,128 +231,33 @@ for s in range(30):
                                     hfms.append(0)
                                     tsc.append([])
                                     kimi_Id.append('none')
-                                    print('服务器id:',fwqid,'已经成功被记录')
+                                    glm_id.append('none')
+                                    logger.info('服务器id:'+str(fwqid)+'已经成功被记录')
                                     print(fwqlb)
                                     sentrytool({"fwqid":fwqid},"newFwq")
                                 if userid in sycyid:
                                     sycy=sycyid.index(userid)
                                     cysycs[sycy]+=1
-                                    print('用户id:',userid,'使用次数增加1,原本次数为：',cysycs[sycy])
+                                    logger.info('用户id:'+str(userid)+'使用次数增加1,原本次数为：'+str(cysycs[sycy]))
                                     sentrytool({"userid":userid,"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"xxlb":messages[fwqlb.index(fwqid)],"pdid":str(message["data"]["channel_id"])},"yhsy")
                                 else:
                                     sycyid.append(userid)
                                     cysycs.append(1)
-                                    print('新使用用户：',userid)
+                                    logger.info('新使用用户，id:'+str(userid))
                                     print(sycyid)
                                     print(cysycs)
                                     sentrytool({"fwqid":fwqid,"userid":userid},"newUser")
                                     sentrytool({"fwqid":fwqid,"userid":userid,"pdid":str(message["data"]["channel_id"])},"yhsy")
                                 if int(cysycs[sycyid.index(userid)]) == 15:
-                                    print('用户：',userid,'第14次操作')
-                                    url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                    headers = {'content-type':"application/json;charset=utf-8"}
-                                    jsonfile=json.dumps({
-                                    "chat_id":int(message["data"]["channel_id"]),
-                                    "text": '速率限制：\n你当前给机器人发送消息数超过每两分钟14次，请休息一下，2分钟后再来吧'+get_ad(adjl=2,fwqid=fwqid),
-                                    "reply_to_message_id":int(message["data"]["message_id"])
-                                    })
-                                    print(jsonfile)
-                                    postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                    logger.warning('用户：'+str(userid)+'第15次操作')
+                                    postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="你当前给机器人发送消息数超过每两分钟14次，请休息一下，2分钟后再来吧",biaoti='速率限制',type='card')
                                     colorize_json(smg2=postreturn.text,pcolor='d')
                                     sentrytool({"userid":userid},"sulvxianzhi")
                                     
                                 elif int(cysycs[sycyid.index(userid)]) < 14:
-                                    if '模式切换' in content['text']:
-                                        fanbookbotapi.sendmessage(token=lingpai,chatid=int(message["data"]["channel_id"]),type='text',text='该功能稍后会被提示词功能代替，敬请期待',ik=[[]])
-                                        return None
-                                        if mxlb[fwqlb.index(fwqid)] == 'ChatGPT':
-                                            if fwqms[fwqlb.index(fwqid)]=='0':
-                                                fwqms[fwqlb.index(fwqid)]='1'
-                                                fwqxz[fwqlb.index(fwqid)]=''
-                                                url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                                headers = {'content-type':"application/json;charset=utf-8"}
-                                                jsonfile=json.dumps({
-                                                "chat_id":int(message["data"]["channel_id"]),
-                                                "text": '回复模式已切换为语音回复模式(默认为派蒙[喵娘属性])\n可通过快捷指令[切换人物]切换'+get_ad(adjl=2,fwqid=fwqid),
-                                                "reply_to_message_id":int(message["data"]["message_id"])
-                                                })
-                                                print(jsonfile)
-                                                postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                                colorize_json(smg2=postreturn.text,pcolor='d')
-                                            else:
-                                                fwqms[fwqlb.index(fwqid)]='0'
-                                                url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                                headers = {'content-type':"application/json;charset=utf-8"}
-                                                jsonfile=json.dumps({
-                                                "chat_id":int(message["data"]["channel_id"]),
-                                                "text": '回复模式已切换为文本模式',
-                                                "reply_to_message_id":int(message["data"]["message_id"])
-                                                })
-                                                print(jsonfile)
-                                                postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                                colorize_json(smg2=postreturn.text,pcolor='d')
-                                        else:
-                                            fwqms[fwqlb.index(fwqid)]='0'
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text": '抱歉，暂时只有ChatGPT支持模式切换，其他均为文本输出，请切换模型为ChatGPT再切换模式'+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                            colorize_json(smg2=postreturn.text,pcolor='d')
-                                    elif '可选人物' in content['text']:
-                                        fanbookbotapi.sendmessage(token=lingpai,chatid=int(message["data"]["channel_id"]),type='text',text='该功能稍后会被提示词功能代替，敬请期待',ik=[[]])
-                                        return None
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text": "${@!"+message["data"]["user_id"]+"}"+'所有可选人物列表：空, 荧, 派蒙, 纳西妲, 阿贝多, 温迪, 枫原万叶, 钟离, 荒泷一斗, 八重神子, 艾尔海森, 提纳里, 迪希雅, 卡维, 宵宫, 莱依拉, 赛诺, 诺艾尔, 托马, 凝光, 莫娜, 北斗, 神里绫华, 雷电将军, 芭芭拉, 鹿野院平藏, 五郎, 迪奥娜, 凯亚, 安柏, 班尼特, 琴, 柯莱, 夜兰, 妮露, 辛焱, 珐露珊, 魈, 香菱, 达达利亚, 砂糖, 早柚, 云堇, 刻晴, 丽莎, 迪卢克, 烟绯, 重云, 珊瑚宫心海, 胡桃, 可莉, 流浪者, 久岐忍, 神里绫人, 甘雨, 戴因斯雷布, 优菈, 菲谢尔, 行秋, 白术, 九条裟罗, 雷泽, 申鹤, 迪娜泽黛, 凯瑟琳, 多莉, 坎蒂丝, 萍姥姥, 罗莎莉亚, 留云借风真君, 绮良良, 瑶瑶, 七七, 奥兹, 米卡, 夏洛蒂, 埃洛伊, 博士, 女士, 大慈树王, 三月七, 娜塔莎, 希露瓦, 虎克, 克拉拉, 丹恒, 希儿, 布洛妮娅, 瓦尔特, 杰帕德, 佩拉, 姬子, 艾丝妲, 白露, 星, 穹, 桑博, 伦纳德, 停云, 罗刹, 卡芙卡, 彦卿, 史瓦罗, 螺丝咕姆, 阿兰, 银狼, 素裳, 丹枢, 黑塔, 景元, 帕姆, 可可利亚, 半夏, 符玄, 公输师傅, 奥列格, 青雀, 大毫, 青镞, 费斯曼, 绿芙蓉, 镜流, 信使, 丽塔, 失落迷迭, 缭乱星棘, 伊甸, 伏特加女孩, 狂热蓝调, 莉莉娅, 萝莎莉娅, 八重樱, 八重霞, 卡莲, 第六夜想曲, 卡萝尔, 姬子, 极地战刃, 布洛妮娅, 次生银翼, 理之律者, 真理之律者, 迷城骇兔, 希儿, 魇夜星渊, 黑希儿, 帕朵菲莉丝, 天元骑英, 幽兰黛尔, 德丽莎, 月下初拥, 朔夜观星, 暮光骑士, 明日香, 李素裳, 格蕾修, 梅比乌斯, 渡鸦, 人之律者, 爱莉希雅, 爱衣, 天穹游侠, 琪亚娜, 空之律者, 终焉之律者, 薪炎之律者, 云墨丹心, 符华, 识之律者, 维尔薇, 始源之律者, 芽衣, 雷之律者, 苏莎娜, 阿波尼亚, 陆景和, 莫弈, 夏彦, 左然\n请使用切换人物指令切换，仅在语音回复模式生效'+get_ad(adjl=2,fwqid=fwqid),
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                        colorize_json(smg2=postreturn.text,pcolor='d')
-                                    elif '切换人物' in content['text']:
-                                        fanbookbotapi.sendmessage(token=lingpai,chatid=int(message["data"]["channel_id"]),type='text',text='该功能稍后会被提示词功能代替，敬请期待',ik=[[]])
-                                        return None
-                                        fwqxz[fwqlb.index(fwqid)]=content['text'][31:-1]
-                                        print(fwqxz[fwqlb.index(fwqid)])
-                                        if str(fwqxz[fwqlb.index(fwqid)]) in []:
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text": '人物已切换为:'+fwqxz[fwqlb.index(fwqid)],
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                            colorize_json(smg2=postreturn.text,pcolor='d')
-                                        else:
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text": '找不到你选择的人物：'+fwqxz[fwqlb.index(fwqid)]+'\n请确认你输入的人物在可选人物列表中'+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                            colorize_json(smg2=postreturn.text,pcolor='d')
-                                    elif '运行节点信息' in content['text']:
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text": "${@!"+message["data"]["user_id"]+"}"+'当前运行节点信息：\n运行节点名：云服务器1[公用]\nip:1.117.76.68\n参考位置：中国-上海市 腾讯云\n近期累计调用次数：'+str(dycs)+'次\n2分钟内调用次数：'+str(efzdy)+'次\n版本号：5.1\n新功能体验/反馈，欢迎前往：https://fanbook.mobi/LmgLJF3N'+get_ad(adjl=2,fwqid=fwqid),
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                    logger.debug('开始处理消息')
+                                    if '运行节点信息' in content['text']:
+                                        postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="${@!"+message["data"]["user_id"]+"}"+'当前运行节点信息：\n运行节点名：云服务器1[公用]\nip:1.117.76.68\n参考位置：中国-上海市 腾讯云\n近期累计调用次数：'+str(dycs)+'次\n2分钟内调用次数：'+str(efzdy)+'次\n版本号：5.2\n新功能体验/反馈，欢迎前往：https://fanbook.mobi/LmgLJF3N',type='text')
                                         colorize_json(smg2=postreturn.text,pcolor='d')
                                         sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"])},"yxjdxx")
                                     elif 'AI绘图' in content['text']:
@@ -378,14 +282,7 @@ for s in range(30):
                                         
                                         sycs1=r["left_times"]
                                         
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text":"请稍等....\n正在努力生成图片，请在一分钟后再来查看此消息。\n你的关键词/表达式为："+gjc+get_ad(adjl=2,fwqid=fwqid),
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                        postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="请稍等....\n正在努力生成图片，请在一分钟后再来查看此消息。\n你的关键词/表达式为："+gjc,type='text')
                                         htxxid=int(postreturn.json()['result']["message_id"])
                                         colorize_json(smg2=postreturn.text,pcolor='d')
                                         try:
@@ -424,7 +321,7 @@ for s in range(30):
                                                 headers = {'content-type':"application/json;charset=utf-8"}
                                                 jsonfile=json.dumps({
                                                 "chat_id":int(message["data"]["channel_id"]),
-                                                "text": "图片生成失败，可能是因为你的关键词不准确，ai不知道这是什么意思\n你的生成句子应该是这样的：一只猫，而不是：帮我画一只猫",
+                                                "text": "图片生成失败，可能是因为你的关键词不准确，ai不知道这是什么意思\n你的生成句子应该是这样的：一只猫，而不是：帮我画一只猫，你可以切换模型为GLM4，然后和ai说要画什么",
                                                 "message_id":htxxid,
                                                 #"parse_mode": "Fanbook"
                                                 })
@@ -450,195 +347,102 @@ for s in range(30):
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                             sentrytool({"userid":userid,"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"xxlb":messages[fwqlb.index(fwqid)],"pdid":str(message["data"]["channel_id"]),"gjc":gjc,"err":str(traceback.format_exc()),"sycs":str(sycs1),"fwqid":str(fwqid)},"aihuituerr")
                                             
-                                    elif '获取绘图图片' in content['text']:
-                                        pass
-                                        """gjc=content['text'][33:-1]
-                                        print('图片id:',gjc)
-                                        htmessage=requests.get('https://api.lolimi.cn/api/ai/mj2?key=sWlckPY0hlgaDryj7hnLewOjTU&id='+str(gjc), stream=True)
-                                        print(htmessage.text)
-                                        htmessage=json.loads(htmessage.text)
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text":"{\"type\":\"richText\",\"title\":\"图片获取成功\",\"document\":\"[{\\\"insert\\\":\\\"111111111\\\\n测试\\\\n\\\\n[图片]\\\\n\\\"}]\",\"v2\":\"[{\\\"insert\\\":\\\"进度："+str(htmessage['data'])+"\\\\n\\\\n\\\\n\\\"},{\\\"insert\\\":{\\\"name\\\":\\\"paste_image_1693622751346.png\\\",\\\"source\\\":\\\""+str(htmessage["imageurl"])+"\\\",\\\"width\\\":1800.0,\\\"height\\\":2912.0,\\\"checkPath\\\":null,\\\"_type\\\":\\\"image\\\",\\\"_inline\\\":false}},{\\\"insert\\\":\\\"\\\\n\\\\n\\\"}]\",\"v\":2}",
-                                        "parse_mode": "Fanbook",
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                        colorize_json(smg2=postreturn.text,pcolor='d')"""
                                     elif '切换模型' in content['text']:
                                         if 'ChatGPT' in content['text']:
                                             messages[fwqlb.index(fwqid)]=[]
                                             mxlb[fwqlb.index(fwqid)] = 'ChatGPT'
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"模型已切换为ChatGPT"+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="模型已切换为ChatGPT",type='text')
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                             sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)]},"xzmx")
                                         elif '文心一言' in content['text']:
                                             fanbookbotapi.sendmessage(token=lingpai,chatid=int(message["data"]["channel_id"]),type='text',text='该模型暂时下线，敬请期待',ik=[[]])
                                             return None
                                             mxlb[fwqlb.index(fwqid)] = '文心一言'
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            # "text":"模型已切换为文心一言"+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                            colorize_json(smg2=postreturn.text,pcolor='d')
                                         elif '星火大模型V2.0' in content['text']:
                                             fanbookbotapi.sendmessage(token=lingpai,chatid=int(message["data"]["channel_id"]),type='text',text='该模型暂时下线，敬请期待',ik=[[]])
                                             return None
                                             mxlb[fwqlb.index(fwqid)] = '星火大模型V2.0'
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"模型已切换为星火大模型V2.0"+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                            colorize_json(smg2=postreturn.text,pcolor='d')
                                         elif 'chatGPT3.5搜索' in content['text']:
                                             messages[fwqlb.index(fwqid)]=[]
                                             mxlb[fwqlb.index(fwqid)] = 'chatGPT3.5搜索'
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"模型已切换为chatGPT3.5搜索模型"+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="模型已切换为chatGPT3.5搜索（联网）模型",type='text')
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                             sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)]},"xzmx")
                                         elif 'KimiAI' in content['text']:
                                             messages[fwqlb.index(fwqid)]=[]
+                                            kimi_Id[fwqlb.index(fwqid)]='none'
                                             mxlb[fwqlb.index(fwqid)] = 'KimiAI'
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"模型已切换为KimiAI模型"+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="模型已切换为KimiAI模型",type='text')
+                                            colorize_json(smg2=postreturn.text,pcolor='d')
+                                            sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)]},"xzmx")
+                                        elif 'GLM4' in content['text']:
+                                            messages[fwqlb.index(fwqid)]=[]
+                                            glm_id[fwqlb.index(fwqid)]='none'
+                                            mxlb[fwqlb.index(fwqid)] = 'GLM4'
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="模型已切换为GLM4模型",type='text')
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                             sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)]},"xzmx")
                                         else:
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"找不到你选择的模型，请重新选择"+get_ad(adjl=2,fwqid=fwqid),
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="找不到你选择的模型，请重新选择",type='text')
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                             
                                     elif 'system_message' in content['text']:
                                         print(content['text'][37:])
                                         system_message=content['text'][37:]
                                         messages[fwqlb.index(fwqid)].append({"role":"system","content":system_message})
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text":'系统消息添加成功:'+content['text'][37:]+'\n当前上下文列表:\n'+str(messages[fwqlb.index(fwqid)])+'\n最大上下文长度:'+str(zdsxw),
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                        postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text='系统消息添加成功:'+content['text'][37:]+'\n当前上下文列表:\n'+str(messages[fwqlb.index(fwqid)])+'\n最大上下文长度:'+str(zdsxw),type='text')
                                         colorize_json(smg2=postreturn.text,pcolor='d')
                                         sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"syssmg":system_message},"systemmessage")
                                     elif '清除上下文' in content['text']:
                                         messages[fwqlb.index(fwqid)]=[]
                                         kimi_Id[fwqlb.index(fwqid)]="none"
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text":"${@!"+message["data"]["user_id"]+"}"+'清除上下文成功\n最大上下文长度:'+str(zdsxw)+get_ad(adjl=2,fwqid=fwqid),
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                        glm_id[fwqlb.index(fwqid)]="none"
+                                        postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="${@!"+message["data"]["user_id"]+"}"+'清除上下文成功\n最大上下文长度:'+str(zdsxw)+get_ad(adjl=2,fwqid=fwqid),type='text')
                                         colorize_json(smg2=postreturn.text,pcolor='d')
                                         sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)]},"qcsxw")
                                         if tsc[fwqlb.index(fwqid)]!='':
                                             messages[fwqlb.index(fwqid)].append({"role": "system", "content": tsc[fwqlb.index(fwqid)]})
-                                            print('重新添加提示词')
+                                            logger.debug('重新添加提示词')
                                             
                                     elif '切换回复模式' in content['text']:
                                         if hfms[fwqlb.index(fwqid)]==0:
                                             hfms[fwqlb.index(fwqid)]=1
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"${@!"+message["data"]["user_id"]+"}"+'回复模式已切换为流回复模式',
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="${@!"+message["data"]["user_id"]+"}"+'回复模式已切换为流回复模式',type='text')
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                         else:
                                             hfms[fwqlb.index(fwqid)]=0
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":"${@!"+message["data"]["user_id"]+"}"+'回复模式已切换为普通回复模式',
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text="${@!"+message["data"]["user_id"]+"}"+'回复模式已切换为普通回复模式',type='text')
                                             colorize_json(smg2=postreturn.text,pcolor='d')
                                         sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)]},"qhhfms")
-                                    elif 'system_run_py' in content['text']:
-                                        print(content['text'][36:])
-                                        code=content['text'][36:]
-                                        pdid=int(message["data"]["channel_id"])
-                                        try:
-                                            exec(code, globals())
-                                        except Exception as e:
-                                            error=traceback.format_exc()
-                                            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                            headers = {'content-type':"application/json;charset=utf-8"}
-                                            jsonfile=json.dumps({
-                                            "chat_id":int(message["data"]["channel_id"]),
-                                            "text":'执行失败，原因：\n'+error+'\ncode:\n'+code,
-                                            "reply_to_message_id":int(message["data"]["message_id"])
-                                            })
-                                            print(jsonfile)
-                                            postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                            colorize_json(smg2=postreturn.text,pcolor='d')
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text":'执行完毕',
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                        colorize_json(smg2=postreturn.text,pcolor='d')
-                                        sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"code":code},"runcode")
+                                    # elif 'system_run_py' in content['text']:
+                                    #     print(content['text'][36:])
+                                    #     code=content['text'][36:]
+                                    #     pdid=int(message["data"]["channel_id"])
+                                    #     try:
+                                    #         exec(code, globals())
+                                    #     except Exception as e:
+                                    #         error=traceback.format_exc()
+                                    #         url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
+                                    #         headers = {'content-type':"application/json;charset=utf-8"}
+                                    #         jsonfile=json.dumps({
+                                    #         "chat_id":int(message["data"]["channel_id"]),
+                                    #         "text":'执行失败，原因：\n'+error+'\ncode:\n'+code,
+                                    #         "reply_to_message_id":int(message["data"]["message_id"])
+                                    #         })
+                                    #         print(jsonfile)
+                                    #         postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                    #         colorize_json(smg2=postreturn.text,pcolor='d')
+                                    #     url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
+                                    #     headers = {'content-type':"application/json;charset=utf-8"}
+                                    #     jsonfile=json.dumps({
+                                    #     "chat_id":int(message["data"]["channel_id"]),
+                                    #     "text":'执行完毕',
+                                    #     "reply_to_message_id":int(message["data"]["message_id"])
+                                    #     })
+                                    #     print(jsonfile)
+                                    #     postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                    #     colorize_json(smg2=postreturn.text,pcolor='d')
+                                    #     sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"code":code},"runcode")
                                     elif 'system_xerror' in content['text']:
                                         if xerror:
                                             xerror=False
@@ -646,15 +450,7 @@ for s in range(30):
                                         else:
                                             xerror=True
                                             t='xerror->True'
-                                        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                        headers = {'content-type':"application/json;charset=utf-8"}
-                                        jsonfile=json.dumps({
-                                        "chat_id":int(message["data"]["channel_id"]),
-                                        "text":'完成'+t,
-                                        "reply_to_message_id":int(message["data"]["message_id"])
-                                        })
-                                        print(jsonfile)
-                                        postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                        postreturn=fanbookbotapi.sendmessage(lingpai,chatid=int(message["data"]["channel_id"]),text='完成'+t,type='text')
                                         colorize_json(smg2=postreturn.text,pcolor='d')
                                         sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"x":str(xerror)},"systemXerror")
                                     elif '设置提示词' in content['text']:
@@ -677,7 +473,7 @@ for s in range(30):
                                             text=f'已成功设置提示词\n提示词名称：{r['data'][0]['name']}\n简介：{r['data'][0]['introduce']}\n创建日期：{r['data'][0]['date']}\n创建者：$'
                                             text+='{@!'+r['data'][0]['uid']+'}'+'\n设置提示词id为0即可取消'
                                             messages[fwqlb.index(fwqid)].append({"role": "system", "content": tsc[fwqlb.index(fwqid)]})
-                                            openai.api_key = "sk-EhBDbDacJ2E"
+                                            openai.api_key = "sk-EoeISBCAJdJhi8xJgfCiC99AGdqyRWE9wXHanBhBDbDacJ2E"
                                             openai.api_base = "https://api.chatanywhere.tech/v1"
                                             fanbookbotapi.sendmessage(token=lingpai,chatid=int(message["data"]["channel_id"]),type='text',text=text,ik=[[]])
                                             return None
@@ -689,7 +485,7 @@ for s in range(30):
                                         sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)]},"sztsc")
                                         
                                     else:
-                                        openai.api_key = "sk-EoeIShBDbDacJ2E"
+                                        openai.api_key = "sk-EoeISBCAJdJhi8xJgfCiC99AGdqyRWE9wXHanBhBDbDacJ2E"
                                         openai.api_base = "https://api.chatanywhere.tech/v1"
                                         try:
                                             if fwqms[fwqlb.index(fwqid)]=='0':
@@ -848,7 +644,7 @@ for s in range(30):
                                                         messages[fwqlb.index(fwqid)].pop(1)
                                                         print('删除了上下文'+str(sc)+str(sc2)+'\n剩余长度'+str(len(messages[fwqlb.index(fwqid)])))
                                                     a=''
-                                                    openai.api_key = "sk-xEfyaaE1"
+                                                    openai.api_key = "sk-xEfyaZvkrqeC93F2EdFaE1"
                                                     openai.api_base = "https://free.gpt.ge/v1"
                                                     if hfms[fwqlb.index(fwqid)]==1:
                                                         messages[fwqlb.index(fwqid)].append({"role":"user","content": content['text'][23:]})
@@ -926,15 +722,16 @@ for s in range(30):
                                                         print(jsonfile)
                                                         postreturn=requests.post(url,data=jsonfile,headers=headers)
                                                         colorize_json(smg2=postreturn.text,pcolor='d')
+                                
                                                     sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"xxlb":str(messages[fwqlb.index(fwqid)])},"yhsychatgptss")
                                                     openai.api_base = "https://api.chatanywhere.com.cn/v1"
-                                                    openai.api_key="sk-EoeISBCAJdJhDbDacJ2E"
+                                                    openai.api_key="sk-EoeISBCAJnBhBDbDacJ2E"
                                                 elif mxlb[fwqlb.index(fwqid)] == 'KimiAI':
                                                     ok=0
                                                     #检测引用消息
                                                     try:
                                                         if message["data"]["quote_l1"]!=None:
-                                                            url = "https://a1.fanbook.mobi/api/bot/"+lingpai+"/getMessage"
+                                                            url = f"https://a1.fanbook.mobi/api/bot/{lingpai}/getMessage"
                                                             payload = json.dumps({
                                                             "chat_id": int(message["data"]["channel_id"]),
                                                             "message_id": int(message["data"]["quote_l1"])
@@ -950,7 +747,7 @@ for s in range(30):
                                                             if msg["type"]=="image":
                                                                 url = "http://124.221.67.43/v1/chat/completions"
                                                                 payload = json.dumps({
-                                                                    "id": kimi_Id[fwqlb.index(fwqid)],
+                                                                    "conversation_id": kimi_Id[fwqlb.index(fwqid)],
                                                                     "model": "kimi",
                                                                     "messages": [
                                                                         {
@@ -972,7 +769,7 @@ for s in range(30):
                                                                     "use_search": false
                                                                 })
                                                                 headers = {
-                                                                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWNlbnNywiaWF0IjoxNzIzODA0NDA3LCJqdGkiyZzAifQ.-Ct3HyxFbTT9BLUEqpi0mChIgoCgSd05OJUIaOxNRbJDsCY3HgcwPq7Bu9Nxm46zcvtEn05rFGfQl2RQx3oobA',
+                                                                'Authorization': 'Bearer '+kimi_token,
                                                                 'Content-Type': 'application/json'
                                                                 }
 
@@ -985,7 +782,7 @@ for s in range(30):
                                                             if msg["type"]=="file":
                                                                 url = "http://124.221.67.43/v1/chat/completions"
                                                                 payload = json.dumps({
-                                                                    "id": kimi_Id[fwqlb.index(fwqid)],
+                                                                    "conversation_id": kimi_Id[fwqlb.index(fwqid)],
                                                                     "model": "kimi",
                                                                     "messages": [
                                                                         {
@@ -1007,7 +804,7 @@ for s in range(30):
                                                                     "use_search": false
                                                                 })
                                                                 headers = {
-                                                                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IJDsCY3HgcwPq7Bu9Nxm46zcvtEn05rFGfQl2RQx3oobA',
+                                                                'Authorization': 'Bearer '+kimi_token,
                                                                 'Content-Type': 'application/json'
                                                                 }
 
@@ -1025,9 +822,10 @@ for s in range(30):
                                                             raise Exception("未找到")
                                                     except:
                                                         if ok==0:
-                                                            print("引用消息解析失败")
+                                                            logger.info("引用消息解析失败")
                                                             url = "http://124.221.67.43/v1/chat/completions"
                                                             payload = json.dumps({
+                                                            "conversation_id": kimi_Id[fwqlb.index(fwqid)],
                                                             "model": "kimi",
                                                             "messages": [
                                                                 {
@@ -1039,7 +837,7 @@ for s in range(30):
                                                             "stream": False
                                                             })
                                                             headers = {
-                                                            'Authorization': 'Bearer eyJhbGciOiJIXNkdjE0N2Q0YW0yZ2ciLCJhYnN0cmFjdF91c2VyX2lkIjoiY3F2aTJqbXNkdjE0N2Q0YW0yZzAifQ.-Ct3HyxFbTT9BLUEqpi0mChIgoCgSd05OJUIaOxNRbJDsCY3HgcwPq7Bu9Nxm46zcvtEn05rFGfQl2RQx3oobA',
+                                                            'Authorization': 'Bearer '+kimi_token,
                                                             'Content-Type': 'application/json'
                                                             }
 
@@ -1066,6 +864,140 @@ for s in range(30):
                                                     sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"xxlb":str(messages[fwqlb.index(fwqid)])},"Kimi")
                                                     print(response.text)
                                                     
+                                                elif mxlb[fwqlb.index(fwqid)] == 'GLM4':
+                                                    ok=0
+                                                    #检测引用消息
+                                                    try:
+                                                        if message["data"]["quote_l1"]!=None:
+                                                            url = f"https://a1.fanbook.mobi/api/bot/{lingpai}/getMessage"
+                                                            payload = json.dumps({
+                                                            "chat_id": int(message["data"]["channel_id"]),
+                                                            "message_id": int(message["data"]["quote_l1"])
+                                                            })
+                                                            headers = {
+                                                            'Content-Type': 'application/json'
+                                                            }
+
+                                                            response = requests.request("POST", url, headers=headers, data=payload)
+
+                                                            print(response.text)
+                                                            msg=json.loads(json.loads(response.text)["result"]["text"])
+                                                            if msg["type"]=="image":
+                                                                url = "http://124.221.67.43/glm/v1/chat/completions"
+                                                                payload = json.dumps({
+                                                                    "id": glm_id[fwqlb.index(fwqid)],
+                                                                    "model": "glm4",
+                                                                    "messages": [
+                                                                        {
+                                                                            "role": "user",
+                                                                            "content": [
+                                                                                {
+                                                                                    "type": "image_url",
+                                                                                    "image_url": {
+                                                                                        "url": msg["url"]
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "text",
+                                                                                    "text": content['text'][23:]
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                })
+                                                                headers = {
+                                                                'Authorization': 'Bearer '+glm4_token,
+                                                                'Content-Type': 'application/json'
+                                                                }
+
+                                                                response = requests.request("POST", url, headers=headers, data=payload)
+                                                                postreturn=response
+                                                                text=json.loads(postreturn.text)["choices"][0]["message"]["content"]
+                                                                chatmessage=text
+                                                                glm_id[fwqlb.index(fwqid)]=json.loads(postreturn.text)["id"]
+                                                                ok=1
+                                                            if msg["type"]=="file":
+                                                                url = "http://124.221.67.43/glm/v1/chat/completions"
+                                                                payload = json.dumps({
+                                                                    "id": glm_id[fwqlb.index(fwqid)],
+                                                                    "model": "glm4",
+                                                                    "messages": [
+                                                                        {
+                                                                            "role": "user",
+                                                                            "content": [
+                                                                                {
+                                                                                    "type": "file",
+                                                                                    "file_url": {
+                                                                                        "url": msg["file_url"]
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "text",
+                                                                                    "text": content['text'][23:]
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                })
+                                                                headers = {
+                                                                'Authorization': 'Bearer '+glm4_token,
+                                                                'Content-Type': 'application/json'
+                                                                }
+
+                                                                response = requests.request("POST", url, headers=headers, data=payload)
+                                                                postreturn=response
+                                                                text=json.loads(postreturn.text)["choices"][0]["message"]["content"]
+                                                                chatmessage=text
+                                                                glm_id[fwqlb.index(fwqid)]=json.loads(postreturn.text)["id"]
+                                                                ok=1
+                                                            else:
+                                                                #引发异常已便跳出
+                                                                raise Exception("未找到")
+                                                        else:
+                                                            #引发异常已便跳出
+                                                            raise Exception("未找到")
+                                                    except:
+                                                        if ok==0:
+                                                            print("引用消息解析失败")
+                                                            url = "http://124.221.67.43/glm/v1/chat/completions"
+                                                            payload = json.dumps({
+                                                            "conversation_id":glm_id[fwqlb.index(fwqid)],
+                                                            "model": "glm4",
+                                                            "messages": [
+                                                                {
+                                                                    "role": "user",
+                                                                    "content": content['text'][23:]
+                                                                }
+                                                            ],
+                                                            "stream": False
+                                                            })
+                                                            headers = {
+                                                            'Authorization': 'Bearer '+glm4_token,
+                                                            'Content-Type': 'application/json'
+                                                            }
+
+                                                            response = requests.request("POST", url, headers=headers, data=payload)
+
+                                                            print(response.text)
+                                                            postreturn=response
+                                                            text=json.loads(postreturn.text)["choices"][0]["message"]["content"]
+                                                            chatmessage=text
+                                                            glm_id[fwqlb.index(fwqid)]=json.loads(postreturn.text)["id"]
+                                                        
+                                                    url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
+                                                    headers = {'content-type':"application/json;charset=utf-8"}
+                                                    jsonfile=json.dumps({
+                                                    "chat_id":int(message["data"]["channel_id"]),
+                                                    "text": "${@!"+message["data"]["user_id"]+"}"+text+get_ad(adjl=8,fwqid=fwqid),
+                                                    #"parse_mode":"Fanbook",
+                                                    "reply_to_message_id":int(message["data"]["message_id"])
+                                                    })
+                                                    print(jsonfile)
+                                                    postreturn=requests.post(url,data=jsonfile,headers=headers)
+                                                    
+                                                    colorize_json(smg2=postreturn.text,pcolor='d')
+                                                    sentrytool({"userid":str(message["data"]["user_id"]),"fwqid":str(fwqid),"pdid":str(message["data"]["channel_id"]),"m":mxlb[fwqlb.index(fwqid)],"tsc":tsc[fwqlb.index(fwqid)],"hfms":hfms[fwqlb.index(fwqid)],"xxlb":str(messages[fwqlb.index(fwqid)])},"GLM4")
+                                                    print(response.text)
                                                     
                                                 elif mxlb[fwqlb.index(fwqid)] == '文心一言':
                                                     chatmessage=requests.get('https://api.lolimi.cn/API/AI/wx.php?type=json&format=0&msg='+content['text'][23:], stream=True)
@@ -1087,23 +1019,6 @@ for s in range(30):
                                                     print(jsonfile)
                                                     postreturn=requests.post(url,data=jsonfile,headers=headers)
                                                     colorize_json(smg2=postreturn.text,pcolor='d')
-                                                '''
-                                                else:
-                                                    #chatmessage=chatmessage['data'].replace('\\\\', '\\')
-                                                    chatmessage=chatmessage.replace('\\n', n)
-                                                    text=chatmessage.replace('', '')+get_ad(adjl=8)
-                                                    url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                                                    headers = {'content-type':"application/json;charset=utf-8"}
-                                                    jsonfile=json.dumps({
-                                                    "chat_id":int(message["data"]["channel_id"]),
-                                                    "text": "${@!"+message["data"]["user_id"]+"}"+text+get_ad(adjl=8,fwqid=fwqid),
-                                                    #"parse_mode":"Fanbook",
-                                                    "reply_to_message_id":int(message["data"]["message_id"])
-                                                    })
-                                                    print(jsonfile)
-                                                    postreturn=requests.post(url,data=jsonfile,headers=headers)
-                                                    colorize_json(smg2=postreturn.text,pcolor='d')
-                                                '''
                                             elif fwqms[fwqlb.index(fwqid)]=='1':
                                                 print('音频模式回复')
                                                 print(content['text'])
@@ -1132,6 +1047,7 @@ for s in range(30):
                                             xxjl.append(mxlb[fwqlb.index(fwqid)]+'模式回复消息:'+content['text'][23:].replace('\n', '')+'，模型回复:'+str(chatmessage).replace('\n', ''))
                                             xxfsz.append('发送者:'+message["data"]["author"]["nickname"]+message["data"]["author"]["username"])
                                             xxfszid.append('userid:'+message['data']["user_id"]+" 服务器id:"+str(fwqid))
+                                            logger.debug('消息处理完成')
                                         except Exception as e:
                                             time.sleep(3)
                                             if not xerror:
@@ -1157,20 +1073,15 @@ for s in range(30):
                 if 'KeyError' in traceback.format_exc():
                     pass
                 else:
+                    logger.warning("处理消息错误")
                     error=traceback.format_exc()
                     print(error)
-                    url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                    headers = {'content-type':"application/json;charset=utf-8"}
-                    jsonfile=json.dumps({
-                    "chat_id":545093460387282944,
-                    "text":"发生错误:\n"+error
-                    })
-                    print(jsonfile)
-                    postreturn=requests.post(url,data=jsonfile,headers=headers)
+                    postreturn=fanbookbotapi.sendmessage(lingpai,chatid=545093460387282944,text="发生错误:\n"+error,type='text')
                     colorize_json(smg2=postreturn.text,pcolor='d')
         # allrw='空, 荧, 派蒙, 纳西妲, 阿贝多, 温迪, 枫原万叶, 钟离, 荒泷一斗, 八重神子, 艾尔海森, 提纳里, 迪希雅, 卡维, 宵宫, 莱依拉, 赛诺, 诺艾尔, 托马, 凝光, 莫娜, 北斗, 神里绫华, 雷电将军, 芭芭拉, 鹿野院平藏, 五郎, 迪奥娜, 凯亚, 安柏, 班尼特, 琴, 柯莱, 夜兰, 妮露, 辛焱, 珐露珊, 魈, 香菱, 达达利亚, 砂糖, 早柚, 云堇, 刻晴, 丽莎, 迪卢克, 烟绯, 重云, 珊瑚宫心海, 胡桃, 可莉, 流浪者, 久岐忍, 神里绫人, 甘雨, 戴因斯雷布, 优菈, 菲谢尔, 行秋, 白术, 九条裟罗, 雷泽, 申鹤, 迪娜泽黛, 凯瑟琳, 多莉, 坎蒂丝, 萍姥姥, 罗莎莉亚, 留云借风真君, 绮良良, 瑶瑶, 七七, 奥兹, 米卡, 夏洛蒂, 埃洛伊, 博士, 女士, 大慈树王, 三月七, 娜塔莎, 希露瓦, 虎克, 克拉拉, 丹恒, 希儿, 布洛妮娅, 瓦尔特, 杰帕德, 佩拉, 姬子, 艾丝妲, 白露, 星, 穹, 桑博, 伦纳德, 停云, 罗刹, 卡芙卡, 彦卿, 史瓦罗, 螺丝咕姆, 阿兰, 银狼, 素裳, 丹枢, 黑塔, 景元, 帕姆, 可可利亚, 半夏, 符玄, 公输师傅, 奥列格, 青雀, 大毫, 青镞, 费斯曼, 绿芙蓉, 镜流, 信使, 丽塔, 失落迷迭, 缭乱星棘, 伊甸, 伏特加女孩, 狂热蓝调, 莉莉娅, 萝莎莉娅, 八重樱, 八重霞, 卡莲, 第六夜想曲, 卡萝尔, 姬子, 极地战刃, 布洛妮娅, 次生银翼, 理之律者, 真理之律者, 迷城骇兔, 希儿, 魇夜星渊, 黑希儿, 帕朵菲莉丝, 天元骑英, 幽兰黛尔, 德丽莎, 月下初拥, 朔夜观星, 暮光骑士, 明日香, 李素裳, 格蕾修, 梅比乌斯, 渡鸦, 人之律者, 爱莉希雅, 爱衣, 天穹游侠, 琪亚娜, 空之律者, 终焉之律者, 薪炎之律者, 云墨丹心, 符华, 识之律者, 维尔薇, 始源之律者, 芽衣, 雷之律者, 苏莎娜, 阿波尼亚, 陆景和, 莫弈, 夏彦, 左然'
         # allrw=allrw.split(', ')
         # print(allrw)
+        logger.info("初始化websocket连接")
         xz=''
         false=False
         data_queue = queue.Queue()
@@ -1184,36 +1095,22 @@ for s in range(30):
                 pass
             else:
                 error=traceback.format_exc()
-                addmsg("发生错误:"+str(error),color='red')
+                logger.warning("处理消息错误")
                 print(error)
-                url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-                headers = {'content-type':"application/json;charset=utf-8"}
-                jsonfile=json.dumps({
-                "chat_id":545093460387282944,
-                "text":"发生错误:\n"+error
-                })
-                print(jsonfile)
-                postreturn=requests.post(url,data=jsonfile,headers=headers)
+                postreturn=fanbookbotapi.sendmessage(lingpai,chatid=545093460387282944,text="发生错误:\n"+error,type='text')
                 colorize_json(smg2=postreturn.text,pcolor='d')
         def on_close(ws):
             # 连接关闭时的操作
-            addmsg("连接已关闭",color='red')
-            url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-            headers = {'content-type':"application/json;charset=utf-8"}
-            jsonfile=json.dumps({
-            "chat_id":545093460387282944,
-            "text":"ws连接被关闭"
-            })
-            print(jsonfile)
-            postreturn=requests.post(url,data=jsonfile,headers=headers)
+            logger.warning("连接已关闭")
+            postreturn=fanbookbotapi.sendmessage(lingpai,chatid=545093460387282944,text="ws连接被关闭",type='text')
             colorize_json(smg2=postreturn.text,pcolor='d')
         def on_open(ws):
             # 连接建立时的操作
-            addmsg("连接已建立",color='green')
+            logger.debug("连接已建立")
             sentrytool({"cs":str(b)},"wsok")
             # 发送心跳包
             def send_ping():
-                print('发送：{"type":"ping"}')
+                logger.debug('发送：{"type":"ping"}')
                 ws.send('{"type":"ping"}')
             send_ping()  # 发送第一个心跳包
             # 定时发送心跳包
@@ -1244,7 +1141,7 @@ for s in range(30):
                 print(cpu_res/3)
                 """
                 # 在这里编写需要发送的数据
-                time.sleep(17)
+                time.sleep(10)
                 with open('xxjl.txt', 'w',encoding="utf-8") as file:
                     for item in xxjl:
                         file.write(f"{item}\n")
@@ -1318,9 +1215,9 @@ for s in range(30):
                         except Exception as e:
                             pass
                         pass
-                print('当前警告重置时间：',str(jgczsj))
+                logger.debug('当前警告重置时间：'+str(jgczsj))
                 if jgczsj >= 10:
-                    print('警告重置')
+                    logger.info('警告重置')
                     jgczsj=0
                     efzdy=0
                     sycyid=[]#使用成员id
@@ -1342,7 +1239,7 @@ for s in range(30):
             ws_url = f"wss://gateway-bot.fanbook.mobi/websocket?id={user_token}&dId={device_id}&v={version_number}&x-super-properties={super_str}"
             threading.Thread(target=send_data_thread, daemon=True).start()
             # 建立WebSocket连接
-            websocket.enableTrace(True)
+            websocket.enableTrace(True,level='INFO')
             ws = websocket.WebSocketApp(ws_url,
                                         on_message=on_message,
                                         on_error=on_error,
@@ -1351,31 +1248,14 @@ for s in range(30):
             ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
         else:
             addmsg("无法获取BOT基本信息，请检查令牌是否正确。",color='red')
-        '''
-        xx='{"type": "voice","url": "https://speech.ai.xiaomi.com/speech/1.0/tts_token?token=eyJ2IjoiVjAiLCJuIjoiU1oifQ.AAAXUkp9P1QAFgBdFAwbZ24VTkoaRRsPG2AFFhgAQgBIRyIvRw4PfR9GGBh0VUBPEQhHWxBrPkBITxBDEFhHb1RHT0FXEw0QY20QRU4AWgBZTTJVQQ4YTE9KEXF2AAkUSRNMGBh0XUdeQRtQQ31hahBOGRJPQwlGMwUXHBFdQV5ANmhBTk0UTkEPFW4BQXMUWUECR2A-QEtIEkJHXBM3VRtKFQsSAxpgYxceGBVFEBRPJgMAAAAKR0xLMD99FB8ATABeR2NVQBlHWw8KEjE7D0kaERcPAkBlBA8YR1tEDkBqbxQcQhNUDhhLN0QAFhNYGwkTY2IVSkMOVEdCUnQKExobXRACE2ZtGgA.EO5fMqpLGoC6LrZI3pQP5w","second": '+str(int(audio_duration))+',"isRead": false}'
-
-        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-        headers = {'content-type':"application/json;charset=utf-8"}
-        jsonfile=json.dumps({
-        "chat_id":int(pdid),
-        "text": xx
-        })
-        postreturn=requests.post(url,data=jsonfile,headers=headers)
-        colorize_json(smg2=postreturn.text,pcolor='d')
-        '{\"type\":\"richText\",\"title\":\"\",\"document\":\"[{\\\"insert\\\":\\\"111111111\\\\n测试\\\\n\\\\n[图片]\\\\n\\\"}]\",\"v2\":\"[{\\\"insert\\\":\\\"111111111\\\\n测试\\\\n\\\\n\\\"},{\\\"insert\\\":{\\\"name\\\":\\\"paste_image_1693622751346.png\\\",\\\"source\\\":\\\"https://fb-cdn.fanbook.mobi/fanbook/app/files/chatroom/unKnow/df8ce32b1e5e6990d4d958343a4b973d.png\\\",\\\"checkPath\\\":null,\\\"_type\\\":\\\"image\\\",\\\"_inline\\\":false}},{\\\"insert\\\":\\\"\\\\n\\\\n\\\"}]\",\"v\":2}","entities":[]}}'
-        '''
     except Exception as e:
         print(f"出错：{e}")
-        #global b
-        lingpai='50357763a9034c07c3a6589d53cce2b0f8d65a523b0684d6de33bd62ba569f1397d687a992731ae59b8e16911c3319a7'
-        url='https://a1.fanbook.mobi/api/bot/'+lingpai+'/sendMessage'
-        headers = {'content-type':"application/json;charset=utf-8"}
-        jsonfile=json.dumps({
-        "chat_id":545093460387282944,
-        "text":"发生异常:\n"+str(traceback.format_exc())+"\n尝试次数:"+str(b)+"/30\n尝试重新启动..."
-        })
-        print(jsonfile)
-        postreturn=requests.post(url,data=jsonfile,headers=headers)
+        logger.error("出错，这可能导致连接断开并重启")
+        postreturn=fanbookbotapi.sendmessage(lingpai,chatid=545093460387282944,text="发生异常:\n"+str(traceback.format_exc())+"\n尝试次数:"+str(b)+"/30\n尝试重新启动...",type='text')
         print(postreturn.text)
         sentrytool({"e":str(traceback.format_exc()).replace('\n', '')},"error")
+        logger.warning("尝试重新启动...")
         continue
+
+logger.critical("出错次数超过30次，程序终止")
+input("按回车退出")
